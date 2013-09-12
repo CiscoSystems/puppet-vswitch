@@ -41,6 +41,17 @@ class vswitch::ovs(
     before  => Service['openvswitch'],
   }
 
+#change the logging level of netdev to error
+  exec { 'netdev-err':
+    require  => Service['openvswitch'],
+    command  => "/usr/bin/ovs-appctl vlog/set netdev:file:ERR",
+  }
+#change the logging level of netdev_linux to error
+  exec { 'netdev_linux-err':
+    require  => Service['openvswitch'],
+    command  => "/usr/bin/ovs-appctl vlog/set netdev_linux:file:ERR",
+  }
+
   Service['openvswitch'] -> Vs_port<||>
   Service['openvswitch'] -> Vs_bridge<||>
 }
